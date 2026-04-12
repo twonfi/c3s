@@ -1,0 +1,37 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% if title %}{{ title }} – {% endif %}C3s</title>
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <link rel="icon" href="{% if favicon %}{% static favicon %}{% else %}{% static 'favicons/favicon.svg' %}{% endif %}" type="image/svg+xml">
+</head>
+<body>
+  {% include 'components/c3s_header.html' %}
+  <main id="main">
+    {% if title %}<h1 id="pagetitle">{{ title }}</h1>{% endif %}
+    {% block main %}{% endblock %}
+  </main>
+  <footer id="c3s-footer">
+    <p><b>Celeste's Custom Can Storage</b></p>
+    <p>
+      Generated {% now "c" %}
+      by
+      {% if user.is_authenticated %}
+        {{ user.get_username }}
+      {% else %}
+        [logged out]
+      {% endif %}
+    </p>
+    <p><abbr title="Celeste's Custom Can Storage">C3s</abbr> software &copy; {% now "Y" %} twonum.org / Celeste</p>
+    <p>
+      <abbr title="Celeste's Custom Can Storage">C3s</abbr> comes with <strong>absolutely no warranty</strong>.
+      <br>
+      This is free software, and you are welcome to redistribute it under the GNU Affero General License, either version 3 or (at your option) any later version.
+    </p>
+  </footer>
+  <script src="{% static 'js/index.js' %}"></script>
+</body>
+</html>

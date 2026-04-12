@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block main %}
+  {% if can.description %}
+    <pre>{{ can.description }}</pre>
+  {% endif %}
+
+  {% if objects %}
+    <ul>
+      {% for object in objects %}
+        <li><a href="{{ object.get_absolute_url }}">{{ object.name }}</a>
+          <span class="object-type">[{{ object.get_object_type_verbose }}{% if object.get_object_type_verbose == 'file' %} {{ object.file.content_type }}{% endif %}]</span></li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    This can is empty.
+  {% endif %}
+{% endblock main %}

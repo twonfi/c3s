@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  - Copyright (C) 2026 twonum.org / Celeste.
+  -
+  - This file is part of Celeste's Custom Can Storage (C3s).
+  -
+  - C3s is free software: you can redistribute it and/or modify it under
+  - the terms of the GNU General Public License as published by the Free
+  - Software Foundation, either version 3 of the License, or (at your
+  - option) any later version.
+  -
+  - C3s is distributed in the hope that it will be useful, but WITHOUT
+  - ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  - FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+  - for more details.
+  -
+  - You should have received a copy of the GNU General Public License
+  - along with C3s. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="16"
+  height="16"
+  viewBox="-1 -1 18 18"
+>
+  <metadata>
+    <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+    >
+      <cc:Work xmlns:cc="http://creativecommons.org/ns#">
+          <dc:title>C3s General</dc:title>
+          <dc:creator>twonum.org</dc:creator>
+          <cc:license rdf:resource="https://www.gnu.org/licenses/agpl-3.0.en.html" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g id="c3s-logo">
+    <path d="M 4 4 V 12 A 1 1 0 0 0 12 12 V 4 A 1 1 0 0 0 4 4 A 1 1 0 0 0 12 4" fill="lightgray" stroke="gray" stroke-width="0.5" />
+  </g>
+</svg>

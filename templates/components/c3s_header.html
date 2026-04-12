@@ -1,0 +1,17 @@
+<header id="c3s-header">
+  <nav id="c3s-nav">
+    <ul>
+      <li><a href="{% url 'info:home' %}">C3s</a></li>
+      <li><a href="/api/">API</a></li>
+      {% if user.is_authenticated %}
+        <li><a href="{% url 'account_email' %}">{{ user.username }}</a></li>
+        {% if user.is_staff %}
+          <li><a href="{% url 'admin:index' %}">Management</a></li>
+        {% endif %}
+        <li><a id="logout-link" href="{% url 'account_logout' %}">Sign out</a></li>
+      {% else %}
+        <li><a href="{% url 'account_login' %}">Sign in</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+</header>

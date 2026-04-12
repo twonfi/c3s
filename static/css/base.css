@@ -1,0 +1,74 @@
+/*
+ * Copyright (C) 2026 twonum.org / Celeste.
+ *
+ * This file is part of Celeste's Custom Can Storage (C3s).
+ *
+ * C3s is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * C3s is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with C3s. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  min-height: 100vh;
+  font-family: system-ui, sans-serif;
+}
+
+header#c3s-header {
+  padding: .5em 1em;
+  font-size: 1.4em;
+  color: white;
+  /* Looks like Windows 2000 */
+  background: linear-gradient(90deg, #190226 50%, #726a94 85%, #a091bd 100%);
+
+  a {
+    color: white;
+  }
+
+  nav {
+    ul {
+      margin: 0;
+      padding: 0;
+
+      li {
+        display: inline;
+        margin-right: .8rem;
+        list-style-type: none;
+      }
+    }
+  }
+}
+
+a {
+  text-decoration: underline dotted;
+}
+a:hover {
+  text-decoration: underline solid;
+}
+a:active {
+  text-decoration: underline wavy;
+}
+
+main {
+  padding: 1rem;
+}
+
+footer#c3s-footer {
+  font-size: 1em;
+  margin-top: auto;
+  padding: .5em;
+  border-top: solid #feaa61 5px;
+  background-color: #190226;
+  color: white;
+}
