@@ -33,7 +33,7 @@ admin.site.index_title = "Welcome to Celeste's Custom Can Storage"
 handler404 = "info.views.handler404"
 
 router = routers.DefaultRouter()
-router.register("access-control-lists", AccessControlListViewSet)
+# router.register("access-control-lists", AccessControlListViewSet)
 router.register("cans", CanViewSet)
 
 cans_router = routers.NestedDefaultRouter(router, "cans", lookup="can")
