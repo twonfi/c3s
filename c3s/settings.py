@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "allauth",
     "allauth.account",
+    "allauth.mfa",
     "rest_framework",
     "canstorage.apps.CanStorageConfig",
     "info.apps.InfoConfig",
