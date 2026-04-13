@@ -36,13 +36,13 @@ handler403 = "info.views.handler403"
 handler500 = "info.views.handler500"
 
 router = routers.DefaultRouter()
-# router.register("access-control-lists", AccessControlListViewSet)
+router.register("access-control-lists", AccessControlListViewSet)
 router.register("cans", CanViewSet)
 
 cans_router = routers.NestedDefaultRouter(router, "cans", lookup="can")
-cans_router.register(
-    r"objects", AccessControlListViewSet, basename="can-objects"
-)
+# cans_router.register(
+#     r"objects", AccessControlListViewSet, basename="can-objects"
+# )
 
 urlpatterns = [
     path("admin/", admin.site.urls),
