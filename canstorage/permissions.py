@@ -36,6 +36,8 @@ class AccessControlListPermissions(BasePermission):
         "HEAD": Acl.INDEX,
         "POST": Acl.WRITE,
         "PUT": Acl.WRITE,
+        "PATCH": Acl.WRITE,
+        "DELETE": Acl.WRITE,
     }
 
     # noinspection PyTypeChecker
