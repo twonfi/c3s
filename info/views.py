@@ -57,3 +57,12 @@ def handler403(request, exception):
         f"You don't have permission to perform this action.",
         content_type="text/plain; charset=utf-8",
     )
+
+
+# noinspection PyUnusedLocal
+def handler500(request):
+    return HttpResponseNotFound(
+        f"Sorry, but C3s encountered an error."
+        f"\nIf this error persists, please contact an admin.",
+        content_type="text/plain; charset=utf-8",
+    )
