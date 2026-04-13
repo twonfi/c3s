@@ -76,9 +76,6 @@ class CanSerializer(serializers.HyperlinkedModelSerializer):
             user = request.user
         return obj.access_control_list.get_permissions(user)[0]
 
-    def get_index(self, obj: models.Can) -> str:
-        return ""
-
     def get_text_index(self, obj: models.Can) -> str:
         # noinspection PyTypeChecker
         request: HttpRequest = self.context.get("request")
