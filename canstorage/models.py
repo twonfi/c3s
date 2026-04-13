@@ -336,14 +336,21 @@ class Object(models.Model):
         )
 
 
+class _ObjectMeta:
+    default_permissions = ()
+
+
 class Text(Object):
     data = models.TextField(null=True, blank=True)
+
+    class Meta(_ObjectMeta):
+        pass
 
 
 class JSON(Object):
     data = models.JSONField(null=True, blank=True)
 
-    class Meta:
+    class Meta(_ObjectMeta):
         verbose_name = "JSON"
         verbose_name_plural = "JSONs"
 
@@ -372,6 +379,9 @@ class File(Object):
                 self.content_type = "application/octet-stream"
 
         super().save(*args, **kwargs)
+
+    class Meta(_ObjectMeta):
+        pass
 
 
 # TODO: Optimized image field with automatic conversion

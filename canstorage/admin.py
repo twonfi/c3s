@@ -77,6 +77,38 @@ class ObjectAdmin(admin.ModelAdmin):
             obj.creator = request.user
         super().save_model(request, obj, form, change)
 
+    def has_add_permission(self, request) -> bool:
+        return request.user.has_perm("canstorage.add_object")
+
+    def has_change_permission(self, request, obj: models.Object = None) -> bool:
+        if request.user.has_perm("canstorage.change_object"):
+            return True
+        elif obj is not None and obj.can.access_control_list.check_permission(models.AccessControlList.WRITE, request.user):
+            return True
+        else:
+            return False
+
+    def has_view_permission(self, request, obj: models.Object = None) -> bool:
+        if request.user.has_perm("canstorage.view_object"):
+            return True
+        elif obj is not None and obj.can.access_control_list.check_permission(models.AccessControlList.READ, request.user):
+            return True
+        else:
+            return False
+
+    def has_delete_permission(self, request, obj: models.Object = None) -> bool:
+        if request.user.has_perm("canstorage.delete_object"):
+            return True
+        elif obj is not None and obj.can.access_control_list.check_permission(models.AccessControlList.WRITE, request.user):
+            return True
+        else:
+            return False
+
+    def has_module_permission(self, request) -> bool:
+        # Only uses Django permissions; ACL users must access pages from
+        # can index
+        return request.user.has_perm("canstorage.view_object")
+
 
 @admin.register(models.Text)
 class TextAdmin(ObjectAdmin):
