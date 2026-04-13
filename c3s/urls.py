@@ -31,6 +31,8 @@ admin.site.site_title = "Management – C3s"
 admin.site.index_title = "Welcome to Celeste's Custom Can Storage"
 
 handler404 = "info.views.handler404"
+handler401 = "info.views.handler401"
+handler403 = "info.views.handler403"
 
 router = routers.DefaultRouter()
 # router.register("access-control-lists", AccessControlListViewSet)

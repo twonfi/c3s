@@ -41,3 +41,19 @@ def handler404(request, exception):
         f"The path was not found on this can server.",
         content_type="text/plain; charset=utf-8",
     )
+
+
+# noinspection PyUnusedLocal
+def handler401(request, exception):
+    return HttpResponseNotFound(
+        f"You don't have permission to perform this action.  Please authenticate if you have permission.",
+        content_type="text/plain; charset=utf-8",
+    )
+
+
+# noinspection PyUnusedLocal
+def handler403(request, exception):
+    return HttpResponseNotFound(
+        f"You don't have permission to perform this action.",
+        content_type="text/plain; charset=utf-8",
+    )

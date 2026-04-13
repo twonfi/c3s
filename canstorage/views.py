@@ -35,6 +35,7 @@ def _access_denied(request) -> HttpResponse:
             "You don't have permission to access this can.", status=403
         )
     else:
+        # TODO: Return WWW-Authenticate to be HTTP-compliant
         r = HttpResponse(
             "You don't have permission to access this can."
             "  Please authenticate if you have permission.",
