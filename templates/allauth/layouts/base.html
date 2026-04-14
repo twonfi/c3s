@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block head %}
+  {% block extra_head %}{% endblock extra_head %}
+{% endblock head %}
+
 {% block main %}
   {% block body %}
     {% block content %}{% endblock content %}
