@@ -1,12 +1,12 @@
 [project]
 name = "c3s"
 version = "1.0.0"
-requires-python = ">=3.14"
+requires-python = ">=3.14.4"
 dependencies = [
     "Django[argon2]~=6.0.4",
     "psycopg~=3.3.3",
-    "django-allauth[mfa]~=65.15.0",
-    "fido2~=2.1.1",
+    "django-allauth[mfa]~=65.16.0",
+    "fido2~=2.2.0",
     "pillow~=12.2.0",
     "uvicorn~=0.44.0",
     "django-cleanup~=9.0.0",
