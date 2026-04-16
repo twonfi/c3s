@@ -42,6 +42,9 @@ class AccessControlListPermissions(BasePermission):
 
     # noinspection PyTypeChecker
     def has_object_permission(self, request, view, obj, perm=None):
+        if request.method == "OPTIONS":
+            return True
+
         if not perm:
             perm = self.METHOD_PERMISSIONS[request.method]
 
@@ -65,11 +68,18 @@ class AccessControlListPermissions(BasePermission):
         # Prevent circular imports
         from canstorage.views import CanViewSet, ObjectViewSet
 
+        if request.method == "OPTIONS":
+            return True
+
         tp = type(view)
         if tp is CanViewSet:
             if view.kwargs:
-                acl = Can.objects.get(pk=view.kwargs["pk"]).access_control_list
-                return self.has_object_permission(request, view, acl)
+                try:
+                    acl = Can.objects.get(pk=view.kwargs["pk"]).access_control_list
+                except Can.DoesNotExist:
+                    return request.method in {"GET", "HEAD"}
+                else:
+                    return self.has_object_permission(request, view, acl)
             else:
                 return False
         elif tp is ObjectViewSet:
@@ -82,7 +92,11 @@ class AccessControlListPermissions(BasePermission):
             ]:
                 perm = Acl.INDEX
 
-            acl = Can.objects.get(pk=view.kwargs["can_pk"]).access_control_list
-            return self.has_object_permission(request, view, acl, perm)
+            try:
+                acl = Can.objects.get(pk=view.kwargs["can_pk"]).access_control_list
+            except Can.DoesNotExist:
+                return request.method in {"GET", "HEAD"}
+            else:
+                return self.has_object_permission(request, view, acl, perm)
         else:
-            raise AssertionError("view is not ObjectViewSet")
+            raise AssertionError("view is not CanViewSet or ObjectViewSet")
