@@ -48,7 +48,6 @@ class AccessControlListSerializer(serializers.ModelSerializer):
 
 class CanSerializer(serializers.HyperlinkedModelSerializer):
     access = serializers.SerializerMethodField(read_only=True)
-    index = serializers.SerializerMethodField(read_only=True)
     text_index = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -58,7 +57,6 @@ class CanSerializer(serializers.HyperlinkedModelSerializer):
             "description",
             "access_control_list",
             "access",
-            "index",
             "text_index",
         )
 
@@ -76,13 +74,51 @@ class CanSerializer(serializers.HyperlinkedModelSerializer):
             user = request.user
         return obj.access_control_list.get_permissions(user)[0]
 
-    def get_index(self, obj: models.Can) -> str:
-        return ""
-
     def get_text_index(self, obj: models.Can) -> str:
         # noinspection PyTypeChecker
         request: HttpRequest = self.context.get("request")
         return request.build_absolute_uri(obj.get_absolute_url())
 
 
-class CanObjectIndexSerializer(serializers.HyperlinkedModelSerializer): ...
+class ObjectSerializer(serializers.HyperlinkedModelSerializer):
+    full_name = serializers.SerializerMethodField(read_only=True)
+    data = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = models.Object
+        fields = (
+            "name",
+            "full_name",
+            "can",
+            "object_type",
+            "data",  # Data URL, not the actual data
+        )
+
+    def get_fields(self):
+        fields = super().get_fields()
+        for field in [
+            "full_name",
+            "can",
+            "object_type",
+            "data",
+        ]:
+            fields[field].read_only = True
+        if self.instance:
+            for field in [
+                "name",
+            ]:
+                fields[field].read_only = True
+        return fields
+
+    @staticmethod
+    def get_full_name(obj: models.Object):
+        return str(obj)
+
+    def get_data(self, obj: models.Object):
+        # noinspection PyTypeChecker
+        request: HttpRequest = self.context.get("request")
+        path = obj.get_absolute_url()
+        if request is not None:
+            return request.build_absolute_uri(path)
+        else:
+            return path

@@ -259,6 +259,12 @@ class Can(models.Model):
 class Object(models.Model):
     """A base class for other object types."""
 
+    OBJECT_TYPE_CHOICES = {
+        "Text": "Text",
+        "JSON": "JSON",
+        "File": "File",
+    }
+
     can = models.ForeignKey(
         Can,
         on_delete=models.CASCADE,
@@ -277,7 +283,7 @@ class Object(models.Model):
     )
     creation_date = models.DateTimeField(auto_now_add=True)
 
-    object_type = models.CharField(max_length=20)
+    object_type = models.CharField(max_length=20, choices=OBJECT_TYPE_CHOICES)
     object_type_verbose = models.CharField(max_length=20)
     object_type_verbose_plural = models.CharField(max_length=20)
 

@@ -130,6 +130,25 @@ class CanViewSet(viewsets.ModelViewSet):
     ]
 
     def get_permissions(self):
-        if self.action == "list":
+        if self.action in {
+            "list",
+            "create",
+            "destroy",
+        }:
             return [DjangoModelViewEditPermissions()]
+        return super().get_permissions()
+
+
+class ObjectViewSet(viewsets.ReadOnlyModelViewSet):
+    # TODO: Implement writing and remove ReadOnly
+    serializer_class = serializers.ObjectSerializer
+    permission_classes = [
+        DjangoModelViewEditPermissions | AccessControlListPermissions
+    ]
+    lookup_field = "name"
+
+    def get_queryset(self):
+        return models.Object.objects.filter(can__pk=self.kwargs["can_pk"])
+
+    def get_permissions(self):
         return super().get_permissions()

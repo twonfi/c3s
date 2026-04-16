@@ -17,7 +17,7 @@
 
 from rest_framework.permissions import DjangoModelPermissions, BasePermission
 
-from canstorage.models import Can
+from canstorage.models import Can, Object
 from canstorage.models import AccessControlList as Acl
 
 
@@ -32,8 +32,8 @@ class AccessControlListPermissions(BasePermission):
     """Determine permissions from a can's access control list."""
 
     METHOD_PERMISSIONS = {
-        "GET": Acl.INDEX,
-        "HEAD": Acl.INDEX,
+        "GET": Acl.READ,
+        "HEAD": Acl.READ,
         "POST": Acl.WRITE,
         "PUT": Acl.WRITE,
         "PATCH": Acl.WRITE,
@@ -41,9 +41,48 @@ class AccessControlListPermissions(BasePermission):
     }
 
     # noinspection PyTypeChecker
-    def has_object_permission(self, request, view, obj: Can):
-        if request.method in self.METHOD_PERMISSIONS:
-            return obj.access_control_list.check_permission(
-                self.METHOD_PERMISSIONS[request.method], request.user
+    def has_object_permission(self, request, view, obj, perm=None):
+        if not perm:
+            perm = self.METHOD_PERMISSIONS[request.method]
+
+        tp = type(obj)
+        if tp is Can:
+            acl = obj.access_control_list
+        elif tp is Acl:
+            acl = obj
+        elif isinstance(obj, Object):
+            acl = obj.can.access_control_list
+        else:
+            raise AssertionError(
+                "obj is not Can, nor AccessControlList, nor Object"
             )
+
+        if request.method in self.METHOD_PERMISSIONS:
+            return acl.check_permission(perm, request.user)
         return False
+
+    def has_permission(self, request, view):
+        # Prevent circular imports
+        from canstorage.views import CanViewSet, ObjectViewSet
+
+        tp = type(view)
+        if tp is CanViewSet:
+            if view.kwargs:
+                acl = Can.objects.get(pk=view.kwargs["pk"]).access_control_list
+                return self.has_object_permission(request, view, acl)
+            else:
+                return False
+        elif tp is ObjectViewSet:
+            perm = None
+
+            # noinspection PyUnresolvedReferences
+            if view.action == "list" and request.method in [
+                "GET",
+                "HEAD",
+            ]:
+                perm = Acl.INDEX
+
+            acl = Can.objects.get(pk=view.kwargs["can_pk"]).access_control_list
+            return self.has_object_permission(request, view, acl, perm)
+        else:
+            raise AssertionError("view is not ObjectViewSet")

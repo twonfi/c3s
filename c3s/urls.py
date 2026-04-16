@@ -21,7 +21,12 @@ from django.urls import path, re_path, include
 from allauth.account.decorators import secure_admin_login
 from rest_framework_nested import routers
 
-from canstorage.views import AccessControlListViewSet, CanViewSet
+from canstorage.views import (
+    AccessControlListViewSet,
+    CanViewSet,
+    ObjectViewSet,
+)
+from canstorage.routers import ObjectRouter
 
 admin.autodiscover()
 admin.site.login = secure_admin_login(admin.site.login)
@@ -39,16 +44,14 @@ router = routers.DefaultRouter()
 router.register("access-control-lists", AccessControlListViewSet)
 router.register("cans", CanViewSet)
 
-cans_router = routers.NestedDefaultRouter(router, "cans", lookup="can")
-# cans_router.register(
-#     r"objects", AccessControlListViewSet, basename="can-objects"
-# )
+cans_router = ObjectRouter(router, "cans", lookup="can")
+cans_router.register("objects", ObjectViewSet, basename="can-objects")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path(
-        "api/",
+        "api/v1/",
         include(
             [
                 path("", include(router.urls)),
