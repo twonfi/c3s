@@ -100,7 +100,7 @@ def object_access(request, can_name: str, object_name: str):
                     obj.text.data, content_type="text/plain; charset=utf-8"
                 )
             case "JSON":
-                r = JsonResponse(obj.json.data)
+                r = JsonResponse(obj.json.data, safe=False)
             case "File":
                 file_handle = open(obj.file.data.path, "rb")
                 r = FileResponse(file_handle)
