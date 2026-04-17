@@ -26,7 +26,7 @@ from canstorage.views import (
     CanViewSet,
     ObjectViewSet,
 )
-from canstorage.routers import ObjectRouter
+from canstorage.routers import CanRouter
 
 admin.autodiscover()
 admin.site.login = secure_admin_login(admin.site.login)
@@ -44,7 +44,7 @@ router = routers.DefaultRouter()
 router.register("access-control-lists", AccessControlListViewSet)
 router.register("cans", CanViewSet)
 
-cans_router = ObjectRouter(router, "cans", lookup="can")
+cans_router = CanRouter(router, "cans", lookup="can")
 cans_router.register("objects", ObjectViewSet, basename="can-objects")
 
 urlpatterns = [

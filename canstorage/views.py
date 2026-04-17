@@ -128,6 +128,7 @@ class CanViewSet(viewsets.ModelViewSet):
     permission_classes = [
         DjangoModelViewEditPermissions | AccessControlListPermissions
     ]
+    lookup_value_regex = r"[^/]+"
 
     def get_permissions(self):
         if self.action in {
