@@ -341,6 +341,20 @@ class Object(models.Model):
             kwargs={"can_name": self.can.name, "object_name": self.name},
         )
 
+    def get_content_type(self) -> str:
+        match self.object_type:
+            case "Text":
+                return "text/plain; charset=utf-8"
+            case "JSON":
+                return "application/json"
+            case "File":
+                try:
+                    # noinspection PyUnresolvedReferences
+                    return self.file.content_type
+                except NameError:
+                    return "application/octet-stream"
+            case _:
+                return "application/octet-stream"
 
 class _ObjectMeta:
     default_permissions = ()

@@ -104,12 +104,12 @@ def object_access(request, can_name: str, object_name: str):
             case "File":
                 file_handle = open(obj.file.data.path, "rb")
                 r = FileResponse(file_handle)
-                r["Content-Type"] = obj.file.content_type
             case _:
                 # That wasn't supposed to happen...
                 raise Exception
 
         r["Allow"] = "GET, HEAD, OPTIONS"
+        r["Content-Type"] = obj.get_content_type()
         r["Object-Type"] = obj.object_type
         return r
     else:

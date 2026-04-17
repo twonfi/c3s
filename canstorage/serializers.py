@@ -82,6 +82,7 @@ class CanSerializer(serializers.HyperlinkedModelSerializer):
 
 class ObjectSerializer(serializers.HyperlinkedModelSerializer):
     full_name = serializers.SerializerMethodField(read_only=True)
+    content_type = serializers.SerializerMethodField(read_only=True)
     data = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -91,6 +92,7 @@ class ObjectSerializer(serializers.HyperlinkedModelSerializer):
             "full_name",
             "can",
             "object_type",
+            "content_type",
             "data",  # Data URL, not the actual data
         )
 
@@ -113,6 +115,10 @@ class ObjectSerializer(serializers.HyperlinkedModelSerializer):
     @staticmethod
     def get_full_name(obj: models.Object):
         return str(obj)
+
+    @staticmethod
+    def get_content_type(obj: models.Object):
+        return obj.get_content_type()
 
     def get_data(self, obj: models.Object):
         # noinspection PyTypeChecker
