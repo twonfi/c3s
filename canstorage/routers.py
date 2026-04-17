@@ -59,6 +59,7 @@ DynamicRoute = namedtuple(
     "DynamicRoute", ["url", "name", "detail", "initkwargs"]
 )
 
+
 class CanRouter(NestedSimpleRouter):
     routes = [
         # List route

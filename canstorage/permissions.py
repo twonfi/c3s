@@ -75,7 +75,9 @@ class AccessControlListPermissions(BasePermission):
         if tp is CanViewSet:
             if view.kwargs:
                 try:
-                    acl = Can.objects.get(pk=view.kwargs["pk"]).access_control_list
+                    acl = Can.objects.get(
+                        pk=view.kwargs["pk"]
+                    ).access_control_list
                 except Can.DoesNotExist:
                     return request.method in {"GET", "HEAD"}
                 else:
@@ -93,7 +95,9 @@ class AccessControlListPermissions(BasePermission):
                 perm = Acl.INDEX
 
             try:
-                acl = Can.objects.get(pk=view.kwargs["can_pk"]).access_control_list
+                acl = Can.objects.get(
+                    pk=view.kwargs["can_pk"]
+                ).access_control_list
             except Can.DoesNotExist:
                 return request.method in {"GET", "HEAD"}
             else:
