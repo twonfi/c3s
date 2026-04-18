@@ -1,0 +1,44 @@
+# Example Caddyfile for PROXY_FILE.
+#
+# This assumes a config of:
+# PROXY_FILE=True
+# PROXY_FILE_HEADER=C3s-Proxy-File
+# PROXY_FILE_PATH=""
+
+#  Copyright (C) 2026 twonum.org / Celeste.
+#
+#  This file is part of Celeste's Custom Can Storage (C3s).
+#
+#  C3s is free software: you can redistribute it and/or modify it under
+#  the terms of the GNU Affero General Public License as published by the
+#  Free Software Foundation, either version 3 of the License, or (at your
+#  option) any later version.
+#
+#  C3s is distributed in the hope that it will be useful, but WITHOUT
+#  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+#  FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public
+#  License for more details.
+#
+#  You should have received a copy of the GNU Affero General Public
+#  License along with C3s. If not, see <https://www.gnu.org/licenses/>.
+
+localhost:8001 {
+  reverse_proxy :8000 {
+    @accel header C3s-Proxy-File *
+
+    handle_response @accel {
+      header >Content-Type {rp.header.Content-Type}
+      header Allow {rp.header.Allow}
+      header Content-Disposition {rp.header.Content-Disposition}
+      header Cross-Origin-Opener-Policy {rp.header.Cross-Origin-Opener-Policy}
+      header Object-Type {rp.header.Object-Type}
+      header Referrer-Policy {rp.header.Referrer-Policy}
+      header Vary {rp.header.Vary}
+      header X-Frame-Options {rp.header.X-Frame-Options}
+      header X-Content-Type-Options "nosniff"
+      rewrite * {rp.header.C3s-Proxy-File}
+      root * /dev/null/set/this/to/your/c3s/media
+      file_server
+    }
+  }
+}

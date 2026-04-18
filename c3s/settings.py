@@ -37,6 +37,8 @@ env = Env(
     MEDIA_ROOT=(str, ""),
     SITE_ID=(int, 1),
     SERVER=(str, ""),
+    PROXY_FILE=(bool, False),
+    PROXY_FILE_PATH=(str, ""),
     # Email
     EMAIL_SMTP_HOST=(str, ""),
     EMAIL_SMTP_PORT=(int, 25),
@@ -244,3 +246,9 @@ match env("EMAIL_BACKEND"):
 
 # Server hostname
 SERVER = env("SERVER")
+
+# Proxy file serving (also known as X-Accel-Redirect)
+PROXY_FILE = env("PROXY_FILE")
+if PROXY_FILE:
+    PROXY_FILE_HEADER = env("PROXY_FILE_HEADER")
+    PROXY_FILE_PATH = env("PROXY_FILE_PATH")

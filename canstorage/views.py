@@ -15,9 +15,12 @@
 #  You should have received a copy of the GNU Affero General Public
 #  License along with C3s. If not, see <https://www.gnu.org/licenses/>.
 
+from pathlib import Path
+
 from django.http import HttpResponse, JsonResponse, FileResponse
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import get_user_model
+from django.conf import settings
 from rest_framework import viewsets
 
 from canstorage import models, serializers
@@ -89,31 +92,46 @@ def can_index(request, can_name: str) -> HttpResponse:
 def object_access(request, can_name: str, object_name: str):
     can = get_object_or_404(models.Can, name=can_name)
 
-    if can.access_control_list.check_permission(
+    if not can.access_control_list.check_permission(
         models.AccessControlList.READ, request.user
     ):
-        obj = get_object_or_404(models.Object, can=can, name=object_name)
+        return _access_denied(request)
 
-        match obj.object_type:
-            case "Text":
-                r = HttpResponse(
-                    obj.text.data, content_type="text/plain; charset=utf-8"
+    obj = get_object_or_404(models.Object, can=can, name=object_name)
+
+    match obj.object_type:
+        case "Text":
+            r = HttpResponse(
+                obj.text.data, content_type="text/plain; charset=utf-8"
+            )
+        case "JSON":
+            r = JsonResponse(obj.json.data, safe=False)
+        case "File":
+            if settings.PROXY_FILE:
+                path = (
+                    settings.PROXY_FILE_PATH
+                    + Path(obj.file.data.path)
+                    .relative_to(settings.MEDIA_ROOT)
+                    .as_posix()
                 )
-            case "JSON":
-                r = JsonResponse(obj.json.data, safe=False)
-            case "File":
+
+                r = HttpResponse(
+                    "",
+                    headers={
+                        settings.PROXY_FILE_HEADER: path,
+                    },
+                )
+            else:
                 file_handle = open(obj.file.data.path, "rb")
                 r = FileResponse(file_handle)
-            case _:
-                # That wasn't supposed to happen...
-                raise Exception
+        case _:
+            # That wasn't supposed to happen...
+            raise Exception
 
-        r["Allow"] = "GET, HEAD, OPTIONS"
-        r["Content-Type"] = obj.get_content_type()
-        r["Object-Type"] = obj.object_type
-        return r
-    else:
-        return _access_denied(request)
+    r["Allow"] = "GET, HEAD, OPTIONS"
+    r["Content-Type"] = obj.get_content_type()
+    r["Object-Type"] = obj.object_type
+    return r
 
 
 class AccessControlListViewSet(viewsets.ModelViewSet):
