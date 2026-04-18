@@ -29,7 +29,6 @@ localhost:8001 {
     handle_response @accel {
       header >Content-Type {rp.header.Content-Type}
       header Allow {rp.header.Allow}
-      header Content-Disposition {rp.header.Content-Disposition}
       header Cross-Origin-Opener-Policy {rp.header.Cross-Origin-Opener-Policy}
       header Object-Type {rp.header.Object-Type}
       header Referrer-Policy {rp.header.Referrer-Policy}
