@@ -25,6 +25,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.urls import reverse
+from django.utils.crypto import get_random_string
 
 User = get_user_model()
 
@@ -256,6 +257,10 @@ class Can(models.Model):
         return reverse("canstorage:can_index", kwargs={"can_name": self.name})
 
 
+def generate_object_id() -> str:
+    return get_random_string(32, allowed_chars="0123456789abcdef")
+
+
 class Object(models.Model):
     """A base class for other object types."""
 
@@ -297,6 +302,8 @@ class Object(models.Model):
     _name_at_creation = models.CharField(
         max_length=255, null=True, blank=True, editable=False
     )
+
+    id = models.CharField(max_length=32, primary_key=True, default=generate_object_id)
 
     class Meta:
         constraints = [
@@ -355,6 +362,7 @@ class Object(models.Model):
                     return "application/octet-stream"
             case _:
                 return "application/octet-stream"
+
 
 class _ObjectMeta:
     default_permissions = ()
