@@ -16,7 +16,11 @@
 #  License along with C3s. If not, see <https://www.gnu.org/licenses/>.
 
 # from django.views.generic import TemplateView
-from django.http import HttpResponseNotFound
+from django.http import (HttpResponse,
+    HttpResponseNotFound,
+    HttpResponseForbidden,
+    HttpResponseServerError,
+)
 
 
 # class HomeView(TemplateView):
@@ -45,15 +49,16 @@ def handler404(request, exception):
 
 # noinspection PyUnusedLocal
 def handler401(request, exception):
-    return HttpResponseNotFound(
+    return HttpResponse(
         f"You don't have permission to perform this action.  Please authenticate if you have permission.",
         content_type="text/plain; charset=utf-8",
+        status=401,
     )
 
 
 # noinspection PyUnusedLocal
 def handler403(request, exception):
-    return HttpResponseNotFound(
+    return HttpResponseForbidden(
         f"You don't have permission to perform this action.",
         content_type="text/plain; charset=utf-8",
     )
@@ -61,7 +66,7 @@ def handler403(request, exception):
 
 # noinspection PyUnusedLocal
 def handler500(request):
-    return HttpResponseNotFound(
+    return HttpResponseServerError(
         f"Sorry, but C3s encountered an error."
         f"\nIf this error persists, please contact an admin.",
         content_type="text/plain; charset=utf-8",
