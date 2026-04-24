@@ -68,7 +68,7 @@ urlpatterns = [
         ),
     ),
     re_path(
-        r"^(?!(?:[._].*|accounts|admin|api|cans|c3s|favicon\.ico|media|static|.*\.txt)(?:/|$))(?P<can_name>[^/]+)/",
+        r"^(?!(?:[._].*|accounts|admin|api|cans|c3s|favicon\.ico|media|static|.*\.txt)/)(?P<can_name>[^/]+)/",
         include("canstorage.urls"),
     ),
     path("", include("info.urls")),
