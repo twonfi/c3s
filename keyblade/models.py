@@ -41,7 +41,7 @@ class Key(models.Model):
 
     comment = models.CharField(max_length=255, null=True, blank=True)
 
-    key_hash = models.CharField(max_length=64, editable=False)
+    key_hash = models.CharField(max_length=255, editable=False)
     # Used to prevent "un-revoking" keys
     _revoked = models.BooleanField(default=False, editable=False)
 
