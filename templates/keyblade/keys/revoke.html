@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'css/keyblade/management.css' %}">
+{% endblock head %}
+
+{% block main %}
+  <p>Are you sure you want to <strong>permanently revoke</strong> these keys?</p>
+
+  <table>
+    <caption>Keys to be revoked</caption>
+    <tr><th>ID</th><th>Created</th></tr>
+    {% for key in keys %}
+      <tr id="{{ key.id }}">
+        <th>{{ key.id }}</th>
+        <td>{{ key.creation_date }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+
+  <form method="post">{% csrf_token %}
+    <p><strong>This action is permanent and cannot be undone.</strong></p>
+    <input type="submit" value="Revoke!">
+    <a href="{% url 'keyblade:key_management' %}">Cancel</a>
+  </form>
+{% endblock main %}

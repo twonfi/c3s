@@ -303,7 +303,9 @@ class Object(models.Model):
         max_length=255, null=True, blank=True, editable=False
     )
 
-    id = models.CharField(max_length=32, primary_key=True, default=generate_object_id)
+    id = models.CharField(
+        max_length=32, primary_key=True, default=generate_object_id
+    )
 
     class Meta:
         constraints = [

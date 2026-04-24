@@ -59,6 +59,14 @@ urlpatterns = [
             ]
         ),
     ),
+    path(
+        "c3s/",
+        include(
+            [
+                path("keyblade/", include("keyblade.urls")),
+            ]
+        ),
+    ),
     re_path(
         r"^(?!(?:[._].*|accounts|admin|api|cans|c3s|favicon\.ico|media|static|.*\.txt)(?:/|$))(?P<can_name>[^/]+)/",
         include("canstorage.urls"),

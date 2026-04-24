@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block main %}
+  <p>This key has been created.</p>
+  <p><strong>Please save this key securely.</strong> For security reasons, the key has been hashed and will not be viewable again.</p>
+  <pre>{{ private_key }}</pre>
+  <p>This key will be known as: <code>{{ key.id }}</code></p>
+  <p>Back to <a href="{% url 'keyblade:key_management' %}">key management</a></p>
+{% endblock main %}

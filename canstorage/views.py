@@ -22,12 +22,14 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from rest_framework import viewsets
+from rest_framework.exceptions import AuthenticationFailed
 
 from canstorage import models, serializers
 from canstorage.permissions import (
     DjangoModelViewEditPermissions,
     AccessControlListPermissions,
 )
+from keyblade import authentication
 
 User = get_user_model()
 
@@ -38,11 +40,13 @@ def _access_denied(request) -> HttpResponse:
             "You don't have permission to access this can.", status=403
         )
     else:
-        # TODO: Return WWW-Authenticate to be HTTP-compliant
         r = HttpResponse(
             "You don't have permission to access this can."
             "  Please authenticate if you have permission.",
             status=401,
+            headers={
+                "WWW-Authenticate": "Bearer",
+            },
         )
 
     r["Content-Type"] = "text/plain; charset=utf-8"
@@ -92,8 +96,16 @@ def can_index(request, can_name: str) -> HttpResponse:
 def object_access(request, can_name: str, object_name: str):
     can = get_object_or_404(models.Can, name=can_name)
 
+    if request.user.is_authenticated:
+        user = request.user
+    else:
+        try:
+            user = authentication.KeyAuthentication().authenticate(request)[0]
+        except AuthenticationFailed:
+            return _access_denied(request)
+
     if not can.access_control_list.check_permission(
-        models.AccessControlList.READ, request.user
+        models.AccessControlList.READ, user
     ):
         return _access_denied(request)
 

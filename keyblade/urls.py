@@ -1,0 +1,27 @@
+#  Copyright (C) 2026 twonum.org / Celeste.
+#
+#  This file is part of Celeste's Custom Can Storage (C3s).
+#
+#  C3s is free software: you can redistribute it and/or modify it under
+#  the terms of the GNU Affero General Public License as published by the
+#  Free Software Foundation, either version 3 of the License, or (at your
+#  option) any later version.
+#
+#  C3s is distributed in the hope that it will be useful, but WITHOUT
+#  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+#  FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public
+#  License for more details.
+#
+#  You should have received a copy of the GNU Affero General Public
+#  License along with C3s. If not, see <https://www.gnu.org/licenses/>.
+from django.urls import path
+
+from keyblade import views
+
+app_name = "keyblade"
+
+urlpatterns = [
+    path("keys/", views.key_management, name="key_management"),
+    path("keys/create/", views.create_key, name="create_key"),
+    path("keys/revoke/", views.revoke_key, name="revoke_key"),
+]

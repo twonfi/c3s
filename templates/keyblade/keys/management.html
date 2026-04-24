@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'css/keyblade/management.css' %}">
+{% endblock head %}
+
+{% block main %}
+  <p>This page lists keys authorized to perform actions on your behalf.</p>
+  <p>A <b>key</b> is used for applications to perform actions as if you were logged in.</p>
+  <p><strong>Keys must be <em>properly secured</em>.</strong> An insecurely stored key can take any action as your user.</p>
+  <p>Treat keys like any other API token or password. Do not share them or check them into code repositories.</p>
+  <p>
+    You can use keys in the C3s API by setting the <var><code>Authorization</code></var> header.
+    For example: <code>Authorization: Bearer c3s-0-a1b2c3d4e5f6...</code>
+  </p>
+  <p>
+    Keys work for the C3s API as well as the object data retrieval URLs.
+    They will <em>not</em> work for text indices. The API must be used for indices.
+  </p>
+
+  <hr>
+
+  <form method="get" action="{% url 'keyblade:revoke_key' %}">
+    <input type="submit" value="Revoke selected keys" id="revoke-keys" {% if not keys %}disabled{% endif %}>
+    <a href="{% url 'keyblade:create_key' %}">Create key</a>
+    {% if keys %}
+      <table>
+        <caption>Your keys</caption>
+        <tr><th>Select</th><th>ID</th><th>Status</th><th>Created</th><th>Expires</th><th>Comment</th><th>Actions</th></tr>
+        {% for key in keys %}
+          <tr id="{{ key.id }}" class="key{% if key.revoked %} revoked-key{% endif %}">
+            <td><input type="checkbox" name="keys[]" value="{{ key.id }}" id="{{ key.id }}-select" {% if key.revoked %}disabled{% endif %}></td>
+            <th><label for="{{ key.id }}-select">{{ key.id }}</label></th>
+            <td>{% if key.revoked %}Revoked{% else %}Active{% endif %}</td>
+            <td>{{ key.creation_date }}</td>
+            <td>{{ key.expiration_date }}</td>
+            <td>{{ key.comment }}</td>
+            <td>
+              {% if not key.revoked %}
+                <a href="{% url 'keyblade:revoke_key' %}?keys[]={{ key.id|urlencode }}">Revoke</a>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <p>You do not have any keys.</p>
+    {% endif %}
+  </form>
+{% endblock main %}

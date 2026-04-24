@@ -87,6 +87,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "canstorage.apps.CanStorageConfig",
     "info.apps.InfoConfig",
+    "keyblade.apps.KeybladeConfig",
 ]
 
 MIDDLEWARE = [
@@ -173,6 +174,7 @@ if not DEBUG:
 # DRF
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
+        "keyblade.authentication.KeyAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [

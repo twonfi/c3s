@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block main %}
+  <p>A <b>key</b> is used for applications to perform actions as if you were logged in.</p>
+  <p><strong>Keys must be <em>properly secured</em>.</strong> An insecurely stored key can take any action as your user.</p>
+  <p>C3s does not currently support fine-grained keys. To restrict access, create another user in management first.</p>
+  <form method="post">{% csrf_token %}
+    <fieldset><legend>Create key</legend>
+      {{ form }}
+      <input type="submit" value="Create key">
+      <a href="{% url 'keyblade:key_management' %}">Cancel</a>
+    </fieldset>
+  </form>
+{% endblock main %}
