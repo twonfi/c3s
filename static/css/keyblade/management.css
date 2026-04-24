@@ -17,7 +17,7 @@
  * License along with C3s. If not, see <https://www.gnu.org/licenses/>.
  */
 
-.revoked-key label {
+.revoked-key label, .expired-key label {
   font-style: italic;
   text-decoration: line-through;
   color: #595959;

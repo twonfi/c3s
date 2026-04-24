@@ -14,6 +14,8 @@
 #
 #  You should have received a copy of the GNU Affero General Public
 #  License along with C3s. If not, see <https://www.gnu.org/licenses/>.
+from datetime import date
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
@@ -26,6 +28,7 @@ def key_management(request):
     context = {
         "title": "Key management",
         "keys": Key.objects.filter(user=request.user),
+        "now": date.today(),
     }
 
     return render(request, "keyblade/keys/management.html", context)

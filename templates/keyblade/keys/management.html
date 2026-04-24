@@ -29,10 +29,10 @@
         <caption>Your keys</caption>
         <tr><th>Select</th><th>ID</th><th>Status</th><th>Created</th><th>Expires</th><th>Comment</th><th>Actions</th></tr>
         {% for key in keys %}
-          <tr id="{{ key.id }}" class="key{% if key.revoked %} revoked-key{% endif %}">
+          <tr id="{{ key.id }}" class="key{% if key.revoked %} revoked-key{% endif %}{% if key.expiration_date < now %} expired-key{% endif %}">
             <td><input type="checkbox" name="keys[]" value="{{ key.id }}" id="{{ key.id }}-select" {% if key.revoked %}disabled{% endif %}></td>
             <th><label for="{{ key.id }}-select">{{ key.id }}</label></th>
-            <td>{% if key.revoked %}Revoked{% else %}Active{% endif %}</td>
+            <td>{% if key.revoked %}Revoked{% elif key.expiration_date < now %}Expired{% else %}Active{% endif %}</td>
             <td>{{ key.creation_date }}</td>
             <td>{{ key.expiration_date }}</td>
             <td>{{ key.comment }}</td>
