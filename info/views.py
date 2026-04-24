@@ -16,7 +16,8 @@
 #  License along with C3s. If not, see <https://www.gnu.org/licenses/>.
 
 # from django.views.generic import TemplateView
-from django.http import (HttpResponse,
+from django.http import (
+    HttpResponse,
     HttpResponseNotFound,
     HttpResponseForbidden,
     HttpResponseServerError,

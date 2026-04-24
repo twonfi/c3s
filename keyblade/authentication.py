@@ -21,14 +21,13 @@ from keyblade import models
 
 
 class KeyAuthentication(authentication.BaseAuthentication):
-    AUTHENTICATION_FAILED = AuthenticationFailed("The key used is either invalid, expired, or revoked.")
+    AUTHENTICATION_FAILED = AuthenticationFailed(
+        "The key used is either invalid, expired, or revoked."
+    )
 
     def authenticate(self, request):
         auth_header = request.headers.get("Authorization")
-        if (
-            not auth_header
-            or not auth_header.startswith("Bearer ")
-        ):
+        if not auth_header or not auth_header.startswith("Bearer "):
             return None
 
         private_key = auth_header.removeprefix("Bearer ")

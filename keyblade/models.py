@@ -76,9 +76,8 @@ class Key(models.Model):
             is correct, or None if private_key is None.
         :rtype: tuple[bool, bool | None]
         """
-        if (
-            self.revoked
-            or (self.expiration_date and self.expiration_date < date.today())
+        if self.revoked or (
+            self.expiration_date and self.expiration_date < date.today()
         ):
             return False, False
 
@@ -93,9 +92,11 @@ class Key(models.Model):
 
     def clean(self) -> None:
         if not self.revoked and self._revoked:
-            raise ValidationError("Key revocation is permanent."
-                                  " Once a key is revoked,"
-                                  " it cannot be undone.")
+            raise ValidationError(
+                "Key revocation is permanent."
+                " Once a key is revoked,"
+                " it cannot be undone."
+            )
 
     def save(self, *args, **kwargs):
         if not self.key_hash:
