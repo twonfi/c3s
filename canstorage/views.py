@@ -101,9 +101,14 @@ def object_access(request, can_name: str, object_name: str):
         user = request.user
     else:
         try:
-            user = authentication.KeyAuthentication().authenticate(request)[0]
+            results = authentication.KeyAuthentication().authenticate(request)
         except AuthenticationFailed:
             return _access_denied()
+
+        if not results:
+            user = request.user
+        else:
+            user = results[0]
 
     if not can.access_control_list.check_permission(
         models.AccessControlList.READ, user
