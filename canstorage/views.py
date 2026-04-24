@@ -17,6 +17,7 @@
 
 from pathlib import Path
 
+from django.contrib.auth.models import AnonymousUser
 from django.http import HttpResponse, JsonResponse, FileResponse
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import get_user_model
@@ -34,8 +35,8 @@ from keyblade import authentication
 User = get_user_model()
 
 
-def _access_denied(request) -> HttpResponse:
-    if request.user.is_authenticated:
+def _access_denied(user: User | AnonymousUser = None) -> HttpResponse:
+    if user and user.is_authenticated:
         r = HttpResponse(
             "You don't have permission to access this can.", status=403
         )
@@ -89,7 +90,7 @@ def can_index(request, can_name: str) -> HttpResponse:
         r["Vary"] = "Accept"
         return r
     else:
-        return _access_denied(request)
+        return _access_denied(request.user)
 
 
 # noinspection PyUnresolvedReferences
@@ -102,12 +103,12 @@ def object_access(request, can_name: str, object_name: str):
         try:
             user = authentication.KeyAuthentication().authenticate(request)[0]
         except AuthenticationFailed:
-            return _access_denied(request)
+            return _access_denied()
 
     if not can.access_control_list.check_permission(
         models.AccessControlList.READ, user
     ):
-        return _access_denied(request)
+        return _access_denied(user)
 
     obj = get_object_or_404(models.Object, can=can, name=object_name)
 
