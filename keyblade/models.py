@@ -32,7 +32,7 @@ class Key(models.Model):
     KEY_CHARS = string.ascii_lowercase + string.digits
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    id = models.CharField(max_length=36, editable=False, primary_key=True)
+    id = models.CharField(max_length=255, editable=False, primary_key=True)
 
     creation_date = models.DateTimeField(auto_now_add=True)
 
